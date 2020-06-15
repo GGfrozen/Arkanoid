@@ -11,6 +11,8 @@ public class Block : MonoBehaviour
 
     public GameObject pickUp;
 
+    public bool visibility = true;
+
     [Header("Explode")]
     public bool isExploding;
     public float explodeRadius;
@@ -21,6 +23,7 @@ public class Block : MonoBehaviour
     public int pointsPerBlock = 10;
     void Start()
     {
+
         sprite = GetComponent<SpriteRenderer>();
         levelManager = FindObjectOfType<LevelManager>();
         levelManager.AddBlockCount();
@@ -28,11 +31,12 @@ public class Block : MonoBehaviour
     }
     private void Update()
     {
-        VisionBlock();
+        VisibilityBlock();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        visibility = true;
         DestroyBlock();
     }
     void DestroyBlock()
@@ -41,9 +45,9 @@ public class Block : MonoBehaviour
         if (pointsToBreak == 0)
         {
             Destroy(gameObject);
-            
+
             gameManager.AddScore(pointsPerBlock);
-            
+
 
             if (pickUp != null)
             {
@@ -53,17 +57,17 @@ public class Block : MonoBehaviour
             if (isExploding)
             {
                 LayerMask layerMask = LayerMask.GetMask("Block");
-                Collider2D[] objectsInRadius = Physics2D.OverlapCircleAll(transform.position, explodeRadius,layerMask);
-                
-                foreach(Collider2D objectsI in objectsInRadius)
+                Collider2D[] objectsInRadius = Physics2D.OverlapCircleAll(transform.position, explodeRadius, layerMask);
+
+                foreach (Collider2D objectsI in objectsInRadius)
                 {
-                    if(objectsI.gameObject == gameObject)
+                    if (objectsI.gameObject == gameObject)
                     {
                         continue;
                     }
 
                     Block block = objectsI.gameObject.GetComponent<Block>();
-                    if(block == null)
+                    if (block == null)
                     {
                         Destroy(objectsI.gameObject);
                     }
@@ -72,31 +76,31 @@ public class Block : MonoBehaviour
                         block.DestroyBlock();
                     }
 
-                    
-                    
+
+
                 }
-                
+
             }
             levelManager.RemoveBlockCount();
         }
 
-        
+
     }
 
-    public void VisionBlock()
+    public void VisibilityBlock()
     {
-        if (pointsToBreak == 5)
+        if (visibility == false)
         {
             sprite.enabled = false;
         }
-        else if (pointsToBreak <= 4)
+        else
         {
             sprite.enabled = true;
         }
     }
     private void OnDrawGizmos()
     {
-        
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explodeRadius);
     }
