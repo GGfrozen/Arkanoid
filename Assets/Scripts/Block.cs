@@ -9,7 +9,7 @@ public class Block : MonoBehaviour
     GameManager gameManager;
     SpriteRenderer sprite;
 
-    public GameObject pickUp;
+    public GameObject[] pickUps;
 
     public bool visibility = true;
 
@@ -39,7 +39,7 @@ public class Block : MonoBehaviour
         visibility = true;
         DestroyBlock();
     }
-    void DestroyBlock()
+    public void DestroyBlock()
     {
         pointsToBreak -= 1;
         if (pointsToBreak == 0)
@@ -49,9 +49,11 @@ public class Block : MonoBehaviour
             gameManager.AddScore(pointsPerBlock);
 
 
-            if (pickUp != null)
+            if (pickUps.Length != 0)
             {
                 Vector3 pickupPosition = transform.position;
+                int pickUpIndex = Random.Range(0, pickUps.Length -1 );
+                GameObject pickUp = pickUps[pickUpIndex];
                 Instantiate(pickUp, pickupPosition, Quaternion.identity);
             }
             if (isExploding)

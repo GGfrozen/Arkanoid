@@ -7,12 +7,20 @@ public class Ball : MonoBehaviour
     Platform platform;
     Rigidbody2D rb;
     Vector3 ballOffset;
+    Block block;
 
-
+    bool makeExplosive;
     bool started;
     bool sticky;
     public float speed;
 
+    [Header("Explode")]
+    public float explodeRadius;
+
+    public void MakeExplode()
+    {
+        makeExplosive = true;
+    }
     public bool IsBallStarted()
     {
         return started;
@@ -31,8 +39,7 @@ public class Ball : MonoBehaviour
     {
         
         platform = FindObjectOfType<Platform>();
-        
-
+        block = FindObjectOfType<Block>();
         ballOffset = transform.position - platform.transform.position;
         
     }  
@@ -60,7 +67,7 @@ public class Ball : MonoBehaviour
     public void LaunchBall()
     {
         started = true;
-        Vector2 speedVector = new Vector2(1, 1);
+        Vector2 speedVector = new Vector2(Random.Range(-2,2),Random.Range(1,2));
         rb.velocity = speedVector * speed;
     }
 
@@ -80,7 +87,7 @@ public class Ball : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + (Vector3)rb.velocity);
-
+            Gizmos.DrawWireSphere(transform.position, explodeRadius);
         }
 
     }
@@ -106,11 +113,37 @@ public class Ball : MonoBehaviour
             }
            
         }
+        if(collision.gameObject.CompareTag("Block"))
+        {
+            MakeExplosive();
+        }
     }
+    private void MakeExplosive()
+    {
+        if(makeExplosive == true)
+        {
+            LayerMask layerMask = LayerMask.GetMask("Block");
+            Collider2D[] objectsInRadius = Physics2D.OverlapCircleAll(transform.position, explodeRadius, layerMask);
+            foreach (Collider2D objectsI in objectsInRadius)
+            {
+
+                Block block = objectsI.gameObject.GetComponent<Block>();
+                if (block != null)
+                {
+                    block.DestroyBlock();
+
+                }
+
+
+            }
+        }
+    }
+
     public void ReturnBall()
     {
         started = false;
         rb.velocity = Vector3.zero;
         transform.position = ballOffset;
     }
+  
 }
