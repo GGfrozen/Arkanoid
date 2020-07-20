@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
+    public Image panel;
     public int score;
 
     public bool autoplay;
     public float autoplaySpeed = 1.5f;
 
-    bool pauseActive;
+    public bool pauseActive;
+
+    Platform platform;
 
     private void Awake()
     {
@@ -25,6 +27,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(gameObject);
+        platform = FindObjectOfType<Platform>();
+        
     }
 
 
@@ -52,16 +56,19 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     Time.timeScale = 1;
+                    
                 }
 
                 //Time.timeScale = autoplay == true ? autoplaySpeed : 1;
                 pauseActive = false;
-
+                platform.enabled = true;
             }
             else
             {
                 Time.timeScale = 0;
                 pauseActive = true;
+                panel.gameObject.SetActive(true);
+                platform.enabled = false;
 
             }
         }
@@ -71,5 +78,13 @@ public class GameManager : MonoBehaviour
         this.score += score;
     }
 
+    public void ReturnToGame()
+    {
+        
+        panel.gameObject.SetActive(false);
+        Time.timeScale = 1;
+        pauseActive = false;
+        platform.enabled = true;
+    }
   
 }

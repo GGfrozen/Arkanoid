@@ -121,8 +121,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f0f8eae0737344da1e254bb93927ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickUp: {fileID: 0}
+  pickUps:
+  - {fileID: 8022104548537739535, guid: 63090d69286f96945969a9a99c04b44a, type: 3}
+  - {fileID: 4891075753402413052, guid: 2bd42da7aa14eee4c9c23303c4eaa91f, type: 3}
+  - {fileID: 1684561382187176787, guid: 49299c1943f938a4c9f8895e06d4abdc, type: 3}
+  - {fileID: 1754123951138707233, guid: 26df0a8c9a12fc941b6420c3d1951f21, type: 3}
+  - {fileID: 7825964967527101795, guid: abdac367e4a2a304bb6838e35461d0a4, type: 3}
+  - {fileID: 7788705853127673945, guid: 669e2785ee77bb64391869a645d877f2, type: 3}
+  - {fileID: 1561673761928448317, guid: 21ec528a577c48648b8503063169aa4d, type: 3}
+  - {fileID: 7878222688094686249, guid: 42bb00fc6f8f3374bba8bd4f9a9ebcdf, type: 3}
+  - {fileID: 396147906331603887, guid: 590b90412faa7e4438fbd406f42f0390, type: 3}
+  - {fileID: 7357010613811256822, guid: 62f8b7773f98d1f4aa867de4282f9a4d, type: 3}
+  - {fileID: 8763920950772802059, guid: 10e4f7ce7bf33e740b33438a193deef1, type: 3}
+  - {fileID: 3837433988059141338, guid: 784fb383ce0d4c448a66be89fff7b87c, type: 3}
+  - {fileID: 4152434204157600800, guid: 89b20681f05068b458b3f6090504cbe3, type: 3}
+  destroySound: {fileID: 0}
+  destroyFx: {fileID: 0}
+  visibility: 1
   isExploding: 1
   explodeRadius: 2
-  pointsToBreak: 1
-  pointsPerBlock: 10
+  pointsToBreak: 2
+  pointsPerBlock: 5

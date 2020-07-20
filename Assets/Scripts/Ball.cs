@@ -5,9 +5,11 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     Platform platform;
+    GameManager gm;
     Rigidbody2D rb;
     Vector3 ballOffset;
     Block block;
+    AudioSource ballAudio;
 
     bool makeExplosive;
     bool started;
@@ -34,10 +36,11 @@ public class Ball : MonoBehaviour
     {
         started = false;
         rb = GetComponent<Rigidbody2D>();
+        ballAudio = GetComponent<AudioSource>();
     }
     void Start()
     {
-        
+        gm = FindObjectOfType<GameManager>();
         platform = FindObjectOfType<Platform>();
         block = FindObjectOfType<Block>();
         ballOffset = transform.position - platform.transform.position;
@@ -60,14 +63,17 @@ public class Ball : MonoBehaviour
         transform.position = platform.transform.position + ballOffset;
         if (Input.GetMouseButtonDown(0))
         {
+            if(gm.pauseActive != true)
+            {
+                LaunchBall();
+            }
             
-            LaunchBall();
         }
     }
     public void LaunchBall()
     {
         started = true;
-        Vector2 speedVector = new Vector2(Random.Range(-2,2),Random.Range(1,2));
+        Vector2 speedVector = new Vector2(Random.Range(-2,2),1);
         rb.velocity = speedVector * speed;
     }
 
@@ -103,6 +109,7 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        ballAudio.Play();
         if (collision.gameObject.CompareTag("Platform"))
         {
             if(sticky)
@@ -145,5 +152,6 @@ public class Ball : MonoBehaviour
         rb.velocity = Vector3.zero;
         transform.position = ballOffset;
     }
+
   
 }

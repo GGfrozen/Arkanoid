@@ -11,11 +11,11 @@ public class FinalScore : MonoBehaviour
     public Text finalScore;
 
 
-    int currentScore;
+    
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
-        scenesLoader = FindObjectOfType<ScenesLoader>();
+       gameManager = FindObjectOfType<GameManager>();
+       scenesLoader = FindObjectOfType<ScenesLoader>();
     }
     void Update()
     {
@@ -32,24 +32,27 @@ public class FinalScore : MonoBehaviour
         else
         {
             ModifyBestScore(gameManager.score);
-            GetBestScore(currentScore);
+            SetBestScore();
             gameManager.score = 0;          
         }
     }
     void ModifyBestScore(int score)
     {
+        int currentScore = PlayerPrefs.GetInt("BestScore", 0);
         if(score>currentScore)
         {
-            currentScore = score;
-
+            PlayerPrefs.SetInt("BestScore", score);
         }
+
+        
     }
     void GetFinalScore(int score)
     {
         finalScore.text = "SCORE : " + score;
     }
-    void GetBestScore(int score)
+    void SetBestScore()
     {
+        int score = PlayerPrefs.GetInt("BestScore",0);
         finalScore.text = "BEST SCORE : " + score;
     }
 

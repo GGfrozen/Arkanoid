@@ -10,6 +10,8 @@ public class Block : MonoBehaviour
     SpriteRenderer sprite;
 
     public GameObject[] pickUps;
+    public AudioClip destroySound;
+    public GameObject destroyFx;
 
     public bool visibility = true;
 
@@ -28,6 +30,7 @@ public class Block : MonoBehaviour
         levelManager = FindObjectOfType<LevelManager>();
         levelManager.AddBlockCount();
         gameManager = FindObjectOfType<GameManager>();
+
     }
     private void Update()
     {
@@ -41,9 +44,12 @@ public class Block : MonoBehaviour
     }
     public void DestroyBlock()
     {
+
         pointsToBreak -= 1;
         if (pointsToBreak == 0)
         {
+            AudioSource destroyAudio = FindObjectOfType<AudioSource>();
+            destroyAudio.PlayOneShot(destroySound);
             Destroy(gameObject);
 
             gameManager.AddScore(pointsPerBlock);
@@ -51,10 +57,21 @@ public class Block : MonoBehaviour
 
             if (pickUps.Length != 0)
             {
-                Vector3 pickupPosition = transform.position;
-                int pickUpIndex = Random.Range(0, pickUps.Length -1 );
-                GameObject pickUp = pickUps[pickUpIndex];
-                Instantiate(pickUp, pickupPosition, Quaternion.identity);
+                int randomChance = Random.Range(0, 10);
+                if (randomChance < 3)
+                {
+                    Vector3 pickupPosition = transform.position;
+                    int pickUpIndex = Random.Range(0, pickUps.Length - 1);
+                    GameObject pickUp = pickUps[pickUpIndex];
+                    Instantiate(pickUp, pickupPosition, Quaternion.identity);
+                }
+
+            }
+            if (destroyFx != null)
+            {
+                Vector3 destroyFxVector = transform.position;
+                GameObject newObject = Instantiate(destroyFx, destroyFxVector, Quaternion.identity);
+                Destroy(newObject, 1f);
             }
             if (isExploding)
             {
@@ -78,15 +95,10 @@ public class Block : MonoBehaviour
                         block.DestroyBlock();
                     }
 
-
-
                 }
-
             }
             levelManager.RemoveBlockCount();
         }
-
-
     }
 
     public void VisibilityBlock()

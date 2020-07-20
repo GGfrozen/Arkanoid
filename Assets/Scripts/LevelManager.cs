@@ -30,8 +30,13 @@ public class LevelManager : MonoBehaviour
         blocksNumber--;
         if (blocksNumber <= 0)
         {
-            scenesLoader.LoadNextLevel();
+            
+            Invoke(nameof(LoadNextLevel), 1f);
         }
     }
 
+    private void LoadNextLevel()
+    {
+        scenesLoader.LoadNextLevel();
+    }
 }
